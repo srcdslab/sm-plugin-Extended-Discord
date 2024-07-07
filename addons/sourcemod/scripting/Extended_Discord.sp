@@ -16,7 +16,7 @@ public Plugin myinfo =
 	name		= "Extended Discord Features",
 	author		= ".Rushaway, Dolly",
 	description	= "Provide additonal features for Discord API",
-	version		= "1.0",
+	version		= "1.0.1",
 	url			= ""
 };
 
@@ -35,6 +35,8 @@ public void OnPluginStart()
 	BuildPath(Path_SM, g_sLogPath, sizeof(g_sLogPath), "logs/discord/errors.log");
 	g_cvSteamAPI = CreateConVar("discord_apikey", "", "API Web Steam. Get your own https://steamcommunity.com/dev/apikey", FCVAR_PROTECTED);
 	g_cvSteamAPI.AddChangeHook(ConVarChange);
+
+	g_cvSteamAPI.GetString(g_sAPIKey, sizeof(g_sAPIKey));
 
 	AutoExecConfig(true);
 }
