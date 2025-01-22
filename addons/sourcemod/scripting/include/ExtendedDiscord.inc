@@ -3,6 +3,12 @@
 #endif
 #define _extendeddiscord_included
 
+#define ExtendDiscord_V_MAJOR   1
+#define ExtendDiscord_V_MINOR   1
+#define ExtendDiscord_V_PATCH   0
+
+#define ExtendDiscord_VERSION   "1.1.0"
+
 /*********************************************************
  * Log a message into logs/discord/errors.log
  *
@@ -20,6 +26,21 @@ native void ExtendedDiscord_LogError(const char[] format, any ...);
  * @return          True on success. False otherwise.
  *********************************************************/
 native bool ExtendedDiscord_GetAvatarLink(int iClient, const char[] buffer, int maxlen);
+
+/**
+ * Called when the plugin becomes available.
+ * 
+ * @noreturn
+ */
+forward void ExtendedDiscord_OnPluginStart();
+
+/**
+ * Called when the plugin becomes unavailable.
+ * This can happen when the plugin is reloaded or unloaded.
+ * 
+ * @noreturn
+ */
+forward void ExtendedDiscord_OnPluginEnd();
 
 /**
  * Called right after something is loged a discord error.

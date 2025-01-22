@@ -1,9 +1,12 @@
 #include <discordWebhookAPI>
+#include <ExtendedDiscord>
 #include <sourcemod>
 
 #pragma newdecls required
 #pragma semicolon 1
 
+GlobalForward g_hForward_StatusOK;
+GlobalForward g_hForward_StatusNotOK;
 Handle g_hFwd_OnErrorLogged = INVALID_HANDLE;
 ConVar g_cvSteamAPI;
 
@@ -16,7 +19,7 @@ public Plugin myinfo =
 	name		= "Extended Discord Features",
 	author		= ".Rushaway, Dolly",
 	description	= "Provide additonal features for Discord API",
-	version		= "1.0.1",
+	version		= ExtendDiscord_VERSION,
 	url			= ""
 };
 
@@ -24,6 +27,9 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 {
 	CreateNative("ExtendedDiscord_LogError", Native_LogError);
 	CreateNative("ExtendedDiscord_GetAvatarLink", Native_GetAvatarLink);
+
+	g_hForward_StatusOK = CreateGlobalForward("ExtendedDiscord_OnPluginOK", ET_Ignore);
+	g_hForward_StatusNotOK = CreateGlobalForward("ExtendedDiscord_OnPluginNotOK", ET_Ignore);
 	g_hFwd_OnErrorLogged = CreateGlobalForward("ExtendedDiscord_OnErrorLogged", ET_Ignore, Param_String);
 
 	RegPluginLibrary("ExtendedDiscord");
@@ -39,6 +45,24 @@ public void OnPluginStart()
 	g_cvSteamAPI.GetString(g_sAPIKey, sizeof(g_sAPIKey));
 
 	AutoExecConfig(true);
+}
+
+public void OnAllPluginsLoaded()
+{
+	SendForward_Available();
+}
+
+public void OnPluginPauseChange(bool pause)
+{
+	if (pause)
+		SendForward_NotAvailable();
+	else
+		SendForward_Available();
+}
+
+public void OnPluginEnd()
+{
+	SendForward_NotAvailable();
 }
 
 public void ConVarChange(ConVar CVar, const char[] oldVal, const char[] newVal)
@@ -143,4 +167,16 @@ public int Native_GetAvatarLink(Handle plugin, int numParams)
 {
 	int iClient = GetNativeCell(1);
 	return g_sClientAvatar[iClient][0];
+}
+
+stock void SendForward_Available()
+{
+	Call_StartForward(g_hForward_StatusOK);
+	Call_Finish();
+}
+
+stock void SendForward_NotAvailable()
+{
+	Call_StartForward(g_hForward_StatusNotOK);
+	Call_Finish();
 }
