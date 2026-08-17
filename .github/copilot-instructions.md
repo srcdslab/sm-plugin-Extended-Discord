@@ -7,19 +7,19 @@ This repository contains **Extended Discord**, a SourcePawn plugin for SourceMod
 ### Key Components
 - **Main Plugin**: `addons/sourcemod/scripting/Extended_Discord.sp`
 - **Include File**: `addons/sourcemod/scripting/include/ExtendedDiscord.inc`
-- **Build Config**: `sourceknight.yaml` (SourceKnight build system)
-- **Dependencies**: SourceMod 1.11+ and DiscordWebhookAPI
+- **Build Config**: `.github/workflows/ci.yml` (native GitHub Actions build)
+- **Dependencies**: SourceMod 1.12+ and DiscordWebhookAPI
 
 ## Technical Environment
 
 ### Language & Platform
 - **Language**: SourcePawn (Source engine scripting language)
-- **Platform**: SourceMod 1.11+ (latest stable recommended)
-- **Compiler**: SourcePawn compiler via SourceKnight build system
-- **Build Tool**: SourceKnight (modern SourcePawn package manager and build system)
+- **Platform**: SourceMod 1.12+ (latest stable recommended)
+- **Compiler**: SourcePawn compiler (`spcomp`) via `rumblefrog/setup-sp` GitHub Action
+- **Build Tool**: Native GitHub Actions workflow (`.github/workflows/ci.yml`)
 
 ### Dependencies
-- SourceMod 1.11.0+ (base framework)
+- SourceMod 1.12.0+ (base framework)
 - DiscordWebhookAPI plugin (external dependency)
 - Steam Web API (for avatar fetching functionality)
 
@@ -99,29 +99,22 @@ public void OnClientDisconnect(int iClient)
 
 ## Build & Development Process
 
-### Using SourceKnight Build System
-The project uses SourceKnight for modern SourcePawn development:
+### Using the GitHub Actions Build
+The project builds via a native GitHub Actions workflow (`.github/workflows/ci.yml`):
 
 ```bash
-# Install SourceKnight (if not available)
-pip install sourceknight
-
-# Build the plugin
-sourceknight build
-
-# Clean build artifacts
-sourceknight clean
+# Locally, install SourcePawn compiler matching SourceMod 1.12.x, then:
+spcomp -i addons/sourcemod/scripting/include -o addons/sourcemod/plugins/Extended_Discord.smx addons/sourcemod/scripting/Extended_Discord.sp
 ```
 
-### Build Configuration (`sourceknight.yaml`)
-- Automatically downloads SourceMod dependencies
-- Manages external plugin dependencies (DiscordWebhookAPI)
-- Compiles to `/addons/sourcemod/plugins`
-- Handles include path resolution
+### Build Configuration (`.github/workflows/ci.yml`)
+- Sets up the SourcePawn compiler via `rumblefrog/setup-sp` (SourceMod 1.12.x)
+- Clones and copies include files for the DiscordWebhookAPI dependency
+- Compiles to `addons/sourcemod/plugins`
 
 ### Development Workflow
 1. Make changes to `.sp` or `.inc` files
-2. Run `sourceknight build` to compile
+2. Compile with `spcomp` locally, or push/open a PR to let CI build it
 3. Test on development server
 4. Commit changes (CI will build and release automatically)
 
@@ -240,7 +233,7 @@ if (!g_sAPIKey[0]) {
 
 ### Automated Build Process
 - GitHub Actions automatically builds on push/PR
-- Uses SourceKnight for compilation
+- Uses `rumblefrog/setup-sp` and `spcomp` directly for compilation
 - Creates release artifacts
 - Manages version tagging (`latest` for main branch)
 
@@ -275,7 +268,7 @@ Ensure these are loaded before Extended_Discord:
 ## Troubleshooting Common Issues
 
 ### Build Errors
-- Ensure SourceKnight dependencies are up to date
+- Ensure the DiscordWebhookAPI dependency clone in CI is up to date
 - Check include paths for DiscordWebhookAPI
 - Verify SourceMod version compatibility
 
@@ -295,5 +288,4 @@ Ensure these are loaded before Extended_Discord:
 
 - [SourceMod Documentation](https://docs.sourcemod.net/)
 - [SourcePawn Language Reference](https://docs.sourcemod.net/api/)
-- [SourceKnight Documentation](https://github.com/srcdslab/sourceknight)
 - [Steam Web API Documentation](https://developer.valvesoftware.com/wiki/Steam_Web_API)
