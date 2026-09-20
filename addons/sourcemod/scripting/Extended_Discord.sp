@@ -142,5 +142,12 @@ public int Native_LogError(Handle plugin, int numParams)
 public int Native_GetAvatarLink(Handle plugin, int numParams)
 {
 	int iClient = GetNativeCell(1);
-	return g_sClientAvatar[iClient][0];
+	if (iClient < 1 || iClient > MaxClients)
+		return false;
+
+	if (g_sClientAvatar[iClient][0] == '\0')
+		return false;
+
+	SetNativeString(2, g_sClientAvatar[iClient], GetNativeCell(3));
+	return true;
 }
