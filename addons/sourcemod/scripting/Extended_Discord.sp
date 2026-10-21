@@ -4,7 +4,7 @@
 #pragma newdecls required
 #pragma semicolon 1
 
-Handle g_hFwd_OnErrorLogged = INVALID_HANDLE;
+GlobalForward g_hFwd_OnErrorLogged = null;
 ConVar g_cvSteamAPI;
 
 char g_sClientAvatar[MAXPLAYERS + 1][PLATFORM_MAX_PATH];
@@ -16,7 +16,7 @@ public Plugin myinfo =
 	name		= "Extended Discord Features",
 	author		= ".Rushaway, Dolly",
 	description	= "Provide additonal features for Discord API",
-	version		= "1.0.2",
+	version		= "1.0.3",
 	url			= ""
 };
 
@@ -24,7 +24,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 {
 	CreateNative("ExtendedDiscord_LogError", Native_LogError);
 	CreateNative("ExtendedDiscord_GetAvatarLink", Native_GetAvatarLink);
-	g_hFwd_OnErrorLogged = CreateGlobalForward("ExtendedDiscord_OnErrorLogged", ET_Ignore, Param_String);
+	g_hFwd_OnErrorLogged = new GlobalForward("ExtendedDiscord_OnErrorLogged", ET_Ignore, Param_String);
 
 	RegPluginLibrary("ExtendedDiscord");
 	return APLRes_Success;
