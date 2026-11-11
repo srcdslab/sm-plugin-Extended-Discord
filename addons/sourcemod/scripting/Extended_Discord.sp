@@ -16,7 +16,7 @@ public Plugin myinfo =
 	name		= "Extended Discord Features",
 	author		= ".Rushaway, Dolly",
 	description	= "Provide additonal features for Discord API",
-	version		= "1.0.4",
+	version		= "1.0.5",
 	url			= ""
 };
 
